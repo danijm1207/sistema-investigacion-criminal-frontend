@@ -41,7 +41,8 @@ export function middleware(request: NextRequest) {
   const isAuthRoute = pathname === '/login' || pathname === '/register';
   const isCasesRoute = pathname === '/cases' || pathname.startsWith('/cases/');
   const isAdminRoute = pathname === '/admin' || pathname.startsWith('/admin/');
-  const isPrivateRoute = isCasesRoute || isAdminRoute;
+  const isBenchmarkRoute = pathname === '/benchmark' || pathname.startsWith('/benchmark/');
+  const isPrivateRoute = isCasesRoute || isAdminRoute || isBenchmarkRoute;
 
   // 1. Si no tiene sesión e intenta entrar a una ruta privada -> redirigir a /login
   if (!session && isPrivateRoute) {
@@ -55,8 +56,8 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(casesUrl);
   }
 
-  // 3. Si intenta entrar a /admin sin rol ADMIN -> redirigir a /cases
-  if (isAdminRoute && session?.role !== 'ADMIN') {
+  // 3. Si intenta entrar a /admin o /benchmark sin rol ADMIN -> redirigir a /cases
+  if ((isAdminRoute || isBenchmarkRoute) && session?.role !== 'ADMIN') {
     const casesUrl = new URL('/cases', request.url);
     return NextResponse.redirect(casesUrl);
   }
@@ -65,5 +66,14 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/login', '/register', '/cases/:path*', '/cases', '/admin/:path*', '/admin'],
+  matcher: [
+    '/login',
+    '/register',
+    '/cases/:path*',
+    '/cases',
+    '/admin/:path*',
+    '/admin',
+    '/benchmark/:path*',
+    '/benchmark',
+  ],
 };

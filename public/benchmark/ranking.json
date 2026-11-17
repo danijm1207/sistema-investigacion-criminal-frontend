@@ -1,0 +1,194 @@
+{
+  "isExample": true,
+  "exampleNotice": "DATOS DE EJEMPLO PARA EL FRONTEND — Este archivo representa la estructura canónica de results/consolidated/ranking.json generada por el harness de medición de José Daniel Morales (Integrante D).",
+  "generatedAt": "2026-11-17T00:00:00.000Z",
+  "runId": "run-20261117-preview",
+  "environment": {
+    "os": "Linux 6.6 (Docker Engine 27.x)",
+    "cpu": "2 vCPU (límite por contenedor)",
+    "ramLimit": "2048 MB",
+    "jdkVersion": "Eclipse Temurin 21.0.4",
+    "jvmFlags": "-XX:MaxRAMPercentage=70 -XX:+UseG1GC",
+    "rounds": 3,
+    "scenarios": ["T", "S", "M", "L", "XL"]
+  },
+  "rubricWeights": {
+    "executionTime": 0.25,
+    "memoryConsumption": 0.20,
+    "throughput": 0.20,
+    "codeQuality": 0.15,
+    "reliability": 0.10,
+    "functionalStyle": 0.10
+  },
+  "winner": {
+    "language": "Java",
+    "key": "java",
+    "totalScore": 92.45,
+    "summary": "Java 21 obtiene el mejor balance global, destacando en tiempo de ejecución de pipeline (JIT C2 optimizado para Streams) y consistencia en recolección de basura G1GC bajo los límites de memoria de 2 GB."
+  },
+  "rankings": [
+    {
+      "rank": 1,
+      "language": "Java",
+      "key": "java",
+      "framework": "Javalin 6.3.0 / Jetty",
+      "version": "Java 21 (Eclipse Temurin)",
+      "totalScore": 92.45,
+      "scores": {
+        "executionTime": 94.20,
+        "memoryConsumption": 89.10,
+        "throughput": 95.80,
+        "codeQuality": 91.50,
+        "reliability": 100.00,
+        "functionalStyle": 86.40
+      },
+      "metrics": {
+        "startupTimeMs": 1150,
+        "memoryIdleMb": 88.4,
+        "memoryPeakMb": 412.0,
+        "pipelineThroughputRecordsSec": 2845000,
+        "httpRpsConcurrency50": 1420.5,
+        "httpP95LatencyMs": 14.2,
+        "contractTestsPassed": 42,
+        "contractTestsTotal": 42,
+        "checksumValidityRate": 100.0,
+        "unexpectedErrorRate": 0.0,
+        "codeCoveragePercent": 88.5,
+        "cyclomaticComplexityMean": 2.1,
+        "functionsOver30LinesPercent": 2.4,
+        "codeDuplicationPercent": 1.1,
+        "nloc": 1840,
+        "explicitLoops": 0,
+        "mutableVariables": 0,
+        "functionalCoverageOperations": "6/6",
+        "lambdaDensityPer100Nloc": 14.8,
+        "nullLiteralsCount": 0,
+        "cleanImports": true
+      },
+      "strengths": [
+        "Mayor rendimiento en microbenchmark de pipeline funcional con Java Streams",
+        "Excelente tiempo de arranque y menor latencia P95 bajo concurrencia 50",
+        "100 % de checksums coincidentes con la referencia de Python en todos los escenarios (T, S, M, L, XL)"
+      ],
+      "limitations": [
+        "Sintaxis más verbosa en comparación con Kotlin y Scala para composición de funciones",
+        "Mayor NLOC total debido a la estructura explícita de registros y sellados"
+      ]
+    },
+    {
+      "rank": 2,
+      "language": "Kotlin",
+      "key": "kotlin",
+      "framework": "Javalin 6.3.0 / Jetty",
+      "version": "Kotlin 2.0.21 (JDK 21)",
+      "totalScore": 90.15,
+      "scores": {
+        "executionTime": 90.80,
+        "memoryConsumption": 88.30,
+        "throughput": 91.60,
+        "codeQuality": 93.80,
+        "reliability": 100.00,
+        "functionalStyle": 92.50
+      },
+      "metrics": {
+        "startupTimeMs": 1320,
+        "memoryIdleMb": 92.1,
+        "memoryPeakMb": 438.5,
+        "pipelineThroughputRecordsSec": 2690000,
+        "httpRpsConcurrency50": 1365.0,
+        "httpP95LatencyMs": 16.1,
+        "contractTestsPassed": 42,
+        "contractTestsTotal": 42,
+        "checksumValidityRate": 100.0,
+        "unexpectedErrorRate": 0.0,
+        "codeCoveragePercent": 90.2,
+        "cyclomaticComplexityMean": 1.9,
+        "functionsOver30LinesPercent": 1.5,
+        "codeDuplicationPercent": 0.8,
+        "nloc": 1320,
+        "explicitLoops": 0,
+        "mutableVariables": 0,
+        "functionalCoverageOperations": "6/6",
+        "lambdaDensityPer100Nloc": 18.2,
+        "nullLiteralsCount": 0,
+        "cleanImports": true
+      },
+      "strengths": [
+        "Alta concisión (NLOC reducido frente a Java)",
+        "Excelente ergonomía en colecciones funcionales inmutables y smart casts",
+        "Soporte idiomático para Results y tipos de datos algebraicos"
+      ],
+      "limitations": [
+        "Ligero sobrecosto de memoria debido a wrappers de secuencias e inline lambdas",
+        "Tiempo de arranque ligeramente mayor que Java puro"
+      ]
+    },
+    {
+      "rank": 3,
+      "language": "Scala",
+      "key": "scala",
+      "framework": "Javalin 6.3.0 / Jetty",
+      "version": "Scala 3.3.4 LTS (JDK 21)",
+      "totalScore": 87.60,
+      "scores": {
+        "executionTime": 84.50,
+        "memoryConsumption": 82.10,
+        "throughput": 85.90,
+        "codeQuality": 94.20,
+        "reliability": 100.00,
+        "functionalStyle": 97.80
+      },
+      "metrics": {
+        "startupTimeMs": 1780,
+        "memoryIdleMb": 104.2,
+        "memoryPeakMb": 485.0,
+        "pipelineThroughputRecordsSec": 2410000,
+        "httpRpsConcurrency50": 1210.8,
+        "httpP95LatencyMs": 19.8,
+        "contractTestsPassed": 42,
+        "contractTestsTotal": 42,
+        "checksumValidityRate": 100.0,
+        "unexpectedErrorRate": 0.0,
+        "codeCoveragePercent": 91.0,
+        "cyclomaticComplexityMean": 1.7,
+        "functionsOver30LinesPercent": 0.9,
+        "codeDuplicationPercent": 0.5,
+        "nloc": 1180,
+        "explicitLoops": 0,
+        "mutableVariables": 0,
+        "functionalCoverageOperations": "6/6",
+        "lambdaDensityPer100Nloc": 22.4,
+        "nullLiteralsCount": 0,
+        "cleanImports": true
+      },
+      "strengths": [
+        "Máximo puntaje en pureza funcional y paradigma (Either, colecciones inmutables canónicas)",
+        "Mayor concisión en líneas de código efectivas (menor NLOC)",
+        "Expresividad superior en pattern matching de tipos algebraicos"
+      ],
+      "limitations": [
+        "Mayor consumo de memoria en reposo y bajo carga masiva",
+        "Tiempo de compilación y arranque más prolongado en JVM"
+      ]
+    }
+  ],
+  "sensitivityAnalysis": {
+    "standardRubric": {
+      "name": "Ponderación Oficial de la Rúbrica",
+      "winner": "Java",
+      "scores": { "Java": 92.45, "Kotlin": 90.15, "Scala": 87.60 }
+    },
+    "equalWeights": {
+      "name": "Pesos Iguales (16.67% por criterio)",
+      "winner": "Kotlin",
+      "scores": { "Java": 91.17, "Kotlin": 91.48, "Scala": 90.92 },
+      "notes": "Al equiparar la importancia de la concisión y pureza funcional con el rendimiento bruto, Kotlin toma una ligera ventaja de 0.31 puntos."
+    },
+    "performanceHeavy": {
+      "name": "Prioridad Rendimiento y Latencia (Doble peso)",
+      "winner": "Java",
+      "scores": { "Java": 94.10, "Kotlin": 90.85, "Scala": 85.30 },
+      "notes": "Java consolida una ventaja indiscutible cuando la velocidad de cómputo y el menor uso de memoria dominan el escenario."
+    }
+  }
+}
