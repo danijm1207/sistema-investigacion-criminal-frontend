@@ -3,9 +3,21 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Shield, FolderArchive, Users, LogOut, Menu, X, Lock, User as UserIcon, Settings } from 'lucide-react';
+import {
+  Shield,
+  FolderArchive,
+  Users,
+  BarChart3,
+  LogOut,
+  Menu,
+  X,
+  Lock,
+  User as UserIcon,
+  Settings,
+} from 'lucide-react';
 import { useAuth } from '../../auth';
 import { ThemeToggle } from './ThemeToggle';
+import { BackendSwitcher } from './BackendSwitcher';
 import { ProfileSettingsModal } from './ProfileSettingsModal';
 
 export const Navbar: React.FC = () => {
@@ -50,7 +62,7 @@ export const Navbar: React.FC = () => {
             </div>
 
             {/* Menú y perfil para pantallas medianas/grandes */}
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-3">
               {isAuthenticated ? (
                 <>
                   <Link
@@ -66,22 +78,39 @@ export const Navbar: React.FC = () => {
                   </Link>
 
                   {user?.role === 'ADMIN' && (
-                    <Link
-                      href="/admin"
-                      className={`inline-flex items-center gap-1.5 font-mono text-xs uppercase px-3 py-1.5 border transition-colors ${
-                        isActive('/admin')
-                          ? 'bg-grafito-light border-evidencia text-papel font-bold'
-                          : 'border-transparent text-papel-dark hover:border-grafito-light hover:text-papel'
-                      }`}
-                    >
-                      <Users className="w-3.5 h-3.5 text-evidencia" aria-hidden="true" />
-                      <span>ADMINISTRACIÓN</span>
-                    </Link>
+                    <>
+                      <Link
+                        href="/admin"
+                        className={`inline-flex items-center gap-1.5 font-mono text-xs uppercase px-3 py-1.5 border transition-colors ${
+                          isActive('/admin')
+                            ? 'bg-grafito-light border-evidencia text-papel font-bold'
+                            : 'border-transparent text-papel-dark hover:border-grafito-light hover:text-papel'
+                        }`}
+                      >
+                        <Users className="w-3.5 h-3.5 text-evidencia" aria-hidden="true" />
+                        <span>ADMINISTRACIÓN</span>
+                      </Link>
+
+                      <Link
+                        href="/benchmark"
+                        className={`inline-flex items-center gap-1.5 font-mono text-xs uppercase px-3 py-1.5 border transition-colors ${
+                          isActive('/benchmark')
+                            ? 'bg-grafito-light border-alerta text-papel font-bold'
+                            : 'border-transparent text-papel-dark hover:border-grafito-light hover:text-papel'
+                        }`}
+                      >
+                        <BarChart3 className="w-3.5 h-3.5 text-alerta" aria-hidden="true" />
+                        <span>BENCHMARK</span>
+                      </Link>
+                    </>
                   )}
 
                   <div className="h-4 w-px bg-grafito-light mx-1" aria-hidden="true" />
 
-                  {/* Perfil del detective / agente - Clic para abrir edición y ajustes */}
+                  {/* Selector interactivo de backend (Java / Scala / Kotlin) */}
+                  <BackendSwitcher />
+
+                  {/* Perfil del detective / agente */}
                   <button
                     type="button"
                     onClick={() => setIsProfileOpen(true)}
@@ -90,7 +119,7 @@ export const Navbar: React.FC = () => {
                     aria-label="Abrir perfil y ajustes del investigador"
                   >
                     <div className="flex flex-col text-right">
-                      <span className="text-xs font-mono text-papel font-medium leading-tight truncate max-w-[150px] group-hover:text-alerta transition-colors">
+                      <span className="text-xs font-mono text-papel font-medium leading-tight truncate max-w-[140px] group-hover:text-alerta transition-colors">
                         {user?.name}
                       </span>
                       <span className="text-[10px] font-mono text-alerta tracking-wider uppercase">
@@ -119,6 +148,9 @@ export const Navbar: React.FC = () => {
                 </>
               ) : (
                 <>
+                  {/* Selector interactivo de backend en estado no autenticado */}
+                  <BackendSwitcher />
+
                   <ThemeToggle />
                   <Link
                     href="/login"
@@ -137,8 +169,9 @@ export const Navbar: React.FC = () => {
               )}
             </div>
 
-            {/* Menú móvil y toggle de tema */}
+            {/* Menú móvil, backend switcher y toggle de tema */}
             <div className="flex items-center gap-2 md:hidden">
+              <BackendSwitcher />
               <ThemeToggle />
               <button
                 type="button"
@@ -166,8 +199,7 @@ export const Navbar: React.FC = () => {
                   <div>
                     <p className="text-papel font-bold">{user?.name}</p>
                     <p className="text-[10px] text-alerta uppercase tracking-wider">
-                      {user?.role === 'ADMIN' ? 'COMISARIO' : 'DETECTIVE'} &bull;{' '}
-                      {user?.email}
+                      {user?.role === 'ADMIN' ? 'COMISARIO' : 'DETECTIVE'} &bull; {user?.email}
                     </p>
                   </div>
                   <button
@@ -196,17 +228,31 @@ export const Navbar: React.FC = () => {
                 </Link>
 
                 {user?.role === 'ADMIN' && (
-                  <Link
-                    href="/admin"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`block py-2 px-3 border ${
-                      isActive('/admin')
-                        ? 'bg-grafito border-evidencia text-papel font-bold'
-                        : 'border-grafito-light text-papel-dark'
-                    }`}
-                  >
-                    ADMINISTRACIÓN DE AGENTES
-                  </Link>
+                  <>
+                    <Link
+                      href="/admin"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`block py-2 px-3 border ${
+                        isActive('/admin')
+                          ? 'bg-grafito border-evidencia text-papel font-bold'
+                          : 'border-grafito-light text-papel-dark'
+                      }`}
+                    >
+                      ADMINISTRACIÓN DE AGENTES
+                    </Link>
+
+                    <Link
+                      href="/benchmark"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`block py-2 px-3 border ${
+                        isActive('/benchmark')
+                          ? 'bg-grafito border-alerta text-papel font-bold'
+                          : 'border-grafito-light text-papel-dark'
+                      }`}
+                    >
+                      RESULTADOS DE BENCHMARK
+                    </Link>
+                  </>
                 )}
 
                 <button
@@ -255,10 +301,7 @@ export const Navbar: React.FC = () => {
       </header>
 
       {/* Modal de Edición de Perfil y Ajustes */}
-      <ProfileSettingsModal
-        isOpen={isProfileOpen}
-        onClose={() => setIsProfileOpen(false)}
-      />
+      <ProfileSettingsModal isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
     </>
   );
 };
