@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { API_HOST, TOKEN_COOKIE_NAME } from '../config/api.config';
+import { getApiHost, TOKEN_COOKIE_NAME } from '../config/api.config';
 import { ApiError } from '../domain/api-error';
 
 export interface RequestOptions {
@@ -9,7 +9,7 @@ export interface RequestOptions {
 
 class HttpClient {
   private getBaseUrl(): string {
-    const host = API_HOST.replace(/\/+$/, '');
+    const host = getApiHost().replace(/\/+$/, '');
     return `${host}/api`;
   }
 

@@ -25,6 +25,7 @@ export const SuspectCard: React.FC<SuspectCardProps> = ({ suspect, onEdit, onDel
               src={suspect.photoUrl}
               alt={suspect.fullName}
               fill
+              unoptimized
               className="object-cover"
               sizes="80px"
             />
