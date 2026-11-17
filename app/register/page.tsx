@@ -66,7 +66,6 @@ export default function RegisterPage() {
               Alta de Investigador
             </h1>
           </div>
-          
         </div>
 
         {errorMessage && (

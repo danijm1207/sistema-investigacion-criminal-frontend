@@ -1,246 +1,142 @@
-# Sistema de Investigación Criminal &mdash; Frontend Noir
+# Sistema de Investigación Criminal &mdash; Frontend Noir &amp; Benchmark
 
-> Proyecto de Aula: Desarrollo Web Full-Stack &amp; Paradigmas de Programación (Semestre 2026-2)  
-> Implementación del Frontend: **Next.js 14 (App Router), React 18, TypeScript estricto y Tailwind CSS**
-
----
-
-## 1. Cómo Probar la Aplicación
-
-### Opción A: Probar en Producción (Recomendada para Evaluación)
-1. **Despertar el backend en Render**:  
-   Abrir en el navegador:  
-   👉 [https://sistema-investigacion-criminal-backend.onrender.com/api/health](https://sistema-investigacion-criminal-backend.onrender.com/api/health)  
-   Esperar entre 30 y 50 segundos hasta recibir:
-   ```json
-   {
-     "status": "ok",
-     "service": "Sistema de Investigación Criminal API",
-     "timestamp": "2026-11-10T..."
-   }
-   ```
-2. **Abrir el frontend en Vercel**:  
-   👉 [https://sistema-investigacion-criminal-fron.vercel.app](https://sistema-investigacion-criminal-fron.vercel.app)
-3. **Iniciar sesión con las credenciales de prueba**:
-   - **Detective**: `detective@forense.test` | Contraseña: `Detective2026!`  
-     *(Acceso a expedientes propios, creación de casos con imágenes, evidencias y sospechosos)*
-   - **Administrador**: `admin@forense.test` | Contraseña: `Admin2026!`  
-     *(Acceso global a todos los casos y al panel administrativo `/admin`)*
+> Proyecto de Aula: Lenguajes y Paradigmas de Programación &amp; Desarrollo Web Full-Stack  
+> Implementación del Frontend: **Next.js 14 (App Router), React 18, TypeScript estricto y Tailwind CSS (Estilo Expediente Forense Noir)**
 
 ---
 
-### Opción B: Ejecución en Entorno Local
-1. **Levantar primero el backend**:
-   ```bash
-   cd sistema-investigacion-criminal-backend
-   cp .env.example .env
-   # Configurar cadenas de conexión a base de datos en .env
-   npm ci
-   npm run prisma:generate
-   npm run prisma:migrate
-   npm run prisma:seed
-   npm run dev
-   ```
-   El backend estará disponible en `http://localhost:4000`.
+## 1. Adaptación para la Comparativa de Lenguajes (Java, Scala, Kotlin)
 
-2. **Levantar el frontend**:
-   ```bash
-   cd ../sistema-investigacion-criminal-frontend
-   cp .env.example .env.local
-   # Asegurar que NEXT_PUBLIC_API_HOST=http://localhost:4000
-   npm ci
-   npm run dev
-   ```
-   Abrir en el navegador: [http://localhost:3000](http://localhost:3000).
+En el marco del examen final de **Lenguajes y Paradigmas de Programación**, este frontend se adaptó para operar de forma transparente con cualquiera de las tres implementaciones funcionales del backend (Java 21, Scala 3 y Kotlin 2 sobre Javalin 6 y Jetty), respetando estrictamente el mismo contrato REST y esquema PostgreSQL.
 
----
+### 1.1. Novedades y Capacidades Incorporadas
 
-## 2. Enlaces del Proyecto
+1. **Conexión Dinámica de Backend**:
+   - `NEXT_PUBLIC_API_HOST`: URL base del backend por defecto (por defecto `http://localhost:8081` para Java).
+   - Soporta alternancia entre los puertos de los tres contenedores Docker:
+     * **Java**: `http://localhost:8081`
+     * **Scala**: `http://localhost:8082`
+     * **Kotlin**: `http://localhost:8083`
 
-- **Frontend en Producción (Vercel)**: [https://sistema-investigacion-criminal-fron.vercel.app](https://sistema-investigacion-criminal-fron.vercel.app)
-- **Backend API (Render)**: [https://sistema-investigacion-criminal-backend.onrender.com](https://sistema-investigacion-criminal-backend.onrender.com)
-- **Health Check del Backend**: [https://sistema-investigacion-criminal-backend.onrender.com/api/health](https://sistema-investigacion-criminal-backend.onrender.com/api/health)
-- **Repositorio Hermano (Backend)**: [https://github.com/Juanexzz/sistema-investigacion-criminal-backend](https://github.com/Juanexzz/sistema-investigacion-criminal-backend)
-- **Monorepo Histórico Original**: [https://github.com/juanfer2006/patria_milagro_web](https://github.com/juanfer2006/patria_milagro_web)
+2. **Selector Interactivo de Backend en la Interfaz (Demostración y Sustentación)**:
+   - Componente `BackendSwitcher` integrado en la barra de navegación (desktop y móvil).
+   - Activado mediante `NEXT_PUBLIC_ENABLE_BACKEND_SWITCHER=true`.
+   - Permite al evaluador alternar en caliente entre Java, Scala y Kotlin sin reiniciar el frontend. Al seleccionar otro backend, el sistema persiste la elección, revoca la sesión actual (`cr_token`) y recarga la interfaz para garantizar la integridad de las pruebas.
+
+3. **Visualización de Imágenes desde `/uploads`**:
+   - `next.config.js` autoriza los orígenes locales `http://localhost:8081`, `http://localhost:8082`, `http://localhost:8083` y `127.0.0.1` bajo `/uploads/**`.
+   - Las imágenes adjuntas a casos, sospechosos y evidencias servidas desde los contenedores de los backends se visualizan de manera fluida y sin bloqueos de origen.
+
+4. **Módulo Privado de Resultados de Benchmark (`/benchmark`)**:
+   - Ruta protegida exclusivamente para usuarios con rol `ADMIN` (gestionada en `middleware.ts` y en el cliente).
+   - Lee la consolidación de métricas y clasificación desde `public/benchmark/ranking.json` (estructura canónica generada por el harness de medición en Python).
+   - Muestra el lenguaje ganador, desglose por los 6 criterios de la rúbrica oficial (Tiempo de ejecución 25%, Consumo de memoria 20%, Rendimiento 20%, Calidad de código 15%, Confiabilidad 10%, Uso funcional 10%), gráficos de barras comparativos construidos con CSS/SVG nativo (sin librerías pesadas externas) y análisis de sensibilidad de pesos.
 
 ---
 
-## 3. Reparto de Trabajo (Equipo de 4 Integrantes)
+## 2. Variables de Entorno (`.env.local` / `.env.example`)
 
-| Integrante | Responsabilidad | Aportes Principales |
-| :--- | :--- | :--- |
-| **Juan Esteban Vallejo Hincapié** | **Despliegue, Infraestructura y Casos** | **Despliegue y configuración en Vercel y Render, orquestación de variables de entorno, vistas de casos (`/cases`, `/cases/new`, `/cases/[id]`, `/cases/[id]/edit`), componente ImageUpload e integración de fotos.** |
-| **Juan Fernando Castañeda Agudelo** | **Líder de Proyecto y Arquitectura** | **Fundación del frontend (Next.js App Router, cliente HTTP desacoplado, AuthProvider, useAuth, middleware.ts, páginas de Login, Registro, Not Found y Panel Administrativo de Usuarios).** |
-| **Camilo Gutiérrez Castañeda** | **Sospechosos y Feedback UI** | **Componentes de retroalimentación modal y diálogos (`Modal`, `ConfirmDialog`, `Spinner`, `EmptyState`, `ErrorState`) y módulo completo de personas de interés/sospechosos.** |
-| **José Daniel Morales Villegas** | **Evidencias y Sistema de Diseño** | **Módulo de Evidencias (`EvidencesSection`), Landing Page institucional, tokens de diseño y variables CSS, componentes UI base (`Button`, `Input`, `Select`, `Textarea`, `FormField`, `Pagination`), Navbar con ThemeToggle y Footer.** |
+Configurar un archivo `.env.local` en la raíz del proyecto:
+
+```env
+# URL base del backend activo por defecto (sin barra final ni prefijo /api)
+# Puertos estándar de los backends:
+# - Java:   http://localhost:8081
+# - Scala:  http://localhost:8082
+# - Kotlin: http://localhost:8083
+NEXT_PUBLIC_API_HOST=http://localhost:8081
+
+# Habilitar selector dinámico de backend en la interfaz para sustentación y pruebas
+NEXT_PUBLIC_ENABLE_BACKEND_SWITCHER=true
+
+# URLs individuales de cada backend para el selector de demostración
+NEXT_PUBLIC_API_HOST_JAVA=http://localhost:8081
+NEXT_PUBLIC_API_HOST_SCALA=http://localhost:8082
+NEXT_PUBLIC_API_HOST_KOTLIN=http://localhost:8083
+```
 
 ---
 
-## 4. Credenciales de Prueba Oficiales (Seed)
+## 3. Credenciales de Acceso Oficiales (Seed PostgreSQL)
 
-Para la sustentación y pruebas del sistema, se utilizan las cuentas creadas por el seed oficial de la base de datos:
+Para la sustentación y verificación de los tres backends con base de datos PostgreSQL:
 
 | Rol | Correo de Acceso | Contraseña | Alcance en la Interfaz |
 | :--- | :--- | :--- | :--- |
-| **ADMIN** | `admin@forense.test` | `Admin2026!` | Acceso total a todos los expedientes criminales, panel administrativo `/admin` y desactivación de usuarios. |
-| **USER** | `detective@forense.test` | `Detective2026!` | Acceso exclusivo a expedientes propios, creación de evidencias y vinculación de personas de interés. |
+| **ADMIN** | `admin@investigacion.test` | `Admin12345` | Acceso global a todos los casos, panel administrativo (`/admin`), desactivación de usuarios y acceso exclusivo al panel de resultados (`/benchmark`). |
+| **USER** | `user@investigacion.test` | `User12345` | Acceso a expedientes propios, creación de evidencias y personas de interés. |
+
+*(Nota: También se mantiene compatibilidad con las credenciales históricas `admin@forense.test` / `detective@forense.test` en caso de conexión con backends de desarrollo previo).*
 
 ---
 
-## 5. Rutas y Vistas de la Aplicación
-
-El frontend está estructurado mediante el App Router de Next.js en las siguientes rutas públicas y privadas:
+## 4. Rutas y Vistas de la Aplicación
 
 | Ruta | Acceso | Propósito y Capacidades |
 | :--- | :--- | :--- |
-| `/` | Público | Landing page institucional pericial con presentación del sistema, estadísticas y accesos directos. |
-| `/login` | Público (redirecciona a `/cases` si autenticado) | Formulario de autenticación con verificación de campos, persistencia de sesión en cookie `cr_token` y aviso de sesión expirada. |
-| `/register` | Público (redirecciona a `/cases` si autenticado) | Registro de nuevos usuarios con rol predeterminado `USER`. |
-| `/cases` | Privado (`USER` y `ADMIN`) | Listado de expedientes con filtros combinados (`q`, `status`, `from`, `to`), paginación y tarjetas informativas. |
-| `/cases/new` | Privado (`USER` y `ADMIN`) | Formulario para apertura de caso nuevo, con carga opcional de fotografía a Supabase Storage. |
-| `/cases/[id]` | Privado (`USER` y `ADMIN`) | Expediente criminal detallado: ficha técnica, fotografía de la escena, sección de personas de interés y módulo de evidencias. |
+| `/` | Público | Landing page institucional forense con presentación del sistema. |
+| `/login` | Público (redirecciona a `/cases` si autenticado) | Inicio de sesión con cookie `cr_token` y selector de backend disponible. |
+| `/register` | Público (redirecciona a `/cases` si autenticado) | Registro de agentes con rol predeterminado `USER`. |
+| `/cases` | Privado (`USER` y `ADMIN`) | Listado de expedientes criminales con filtros combinados (`q`, `status`, `from`, `to`), paginación y tarjetas. |
+| `/cases/new` | Privado (`USER` y `ADMIN`) | Formulario de apertura de caso con subida de fotografía adjunta a `/api/uploads`. |
+| `/cases/[id]` | Privado (`USER` y `ADMIN`) | Detalle de expediente: ficha técnica, registro fotográfico, personas de interés y módulo de evidencias. |
 | `/cases/[id]/edit` | Privado (`USER` y `ADMIN`) | Edición de la información del caso y actualización de estado (`OPEN`, `IN_PROGRESS`, `CLOSED`). |
-| `/admin` | Privado (Exclusivo `ADMIN`) | Panel administrativo para listar usuarios paginados y desactivar cuentas (`DELETE /api/users/:id`). No modifica roles. |
+| `/admin` | Privado (Exclusivo `ADMIN`) | Gestión y desactivación de agentes (`DELETE /api/users/:id`). |
+| `/benchmark` | Privado (Exclusivo `ADMIN`) | Informe y visualización técnica del ranking de la comparativa de lenguajes (Java, Scala, Kotlin). |
 
 ---
 
-## 6. Estructura del Proyecto y Arquitectura por Features
-
-El código fuente organiza las rutas y el middleware en la raíz del repositorio, y desacopla la lógica de negocio por módulos funcionales bajo `src/features/`:
+## 5. Estructura del Proyecto
 
 ```
 ├── app/                        # Rutas de Next.js App Router en la raíz del repositorio
-│   ├── admin/                  # Página del panel administrativo (/admin)
+│   ├── admin/                  # Panel administrativo (/admin)
+│   ├── benchmark/              # Panel privado de resultados de benchmark (/benchmark)
 │   ├── cases/                  # Rutas de expedientes criminales (/cases, /cases/new, /cases/[id], etc.)
-│   ├── login/                  # Página de inicio de sesión (/login)
-│   ├── register/               # Página de registro de usuarios (/register)
+│   ├── login/                  # Inicio de sesión (/login)
+│   ├── register/               # Registro de usuarios (/register)
 │   ├── globals.css             # Tokens CSS noir, variables cromáticas y estilos globales
 │   ├── layout.tsx              # Layout raíz con AuthProvider, Navbar y Footer
 │   ├── not-found.tsx           # Vista 404 personalizada
 │   └── page.tsx                # Landing page principal (/)
-├── middleware.ts               # Protección perimetral de rutas en la raíz del repositorio
+├── middleware.ts               # Protección perimetral de rutas (requiere JWT y roles ADMIN)
+├── public/
+│   └── benchmark/
+│       └── ranking.json        # Datos consolidados del ranking generados por el harness
 └── src/
     └── features/               # Módulos de dominio desacoplados
         ├── admin/              # Panel administrativo: admin.service.ts y hook useAdminUsers
         ├── auth/               # Autenticación: AuthProvider, useAuth, cookies y servicios
-        ├── cases/              # Dominio de casos: servicios, hooks (useCases, useCase), filtros y vistas
-        ├── suspects/           # Personas de interés: tarjetas, cálculo de nivel de sospecha (0-100) y modales
-        ├── evidences/          # Evidencias: clasificación, relevancia (1-5) y modales
+        ├── cases/              # Dominio de casos: servicios, hooks, filtros y vistas
+        ├── suspects/           # Personas de interés y sospechosos
+        ├── evidences/          # Evidencias forenses
         └── common/             # Utilidades transversales:
-            ├── components/     # Button, Input, Modal, ConfirmDialog, Spinner, EmptyState, ErrorState
-            ├── domain/         # Tipos y discriminador de errores (ApiError, isApiError)
+            ├── components/     # Button, Input, Modal, BackendSwitcher, Navbar, ThemeToggle...
+            ├── config/         # api.config.ts (gestión de hosts, switcher y cookies)
+            ├── domain/         # Tipos y discriminador de errores (ApiError)
             ├── hooks/          # useImageUpload, useTheme
-            └── http/           # http-client.ts centralizado con inyección de token y manejo de 401
+            └── http/           # http-client.ts desacoplado con inyección dinámica de host y token
 ```
 
 ---
 
-## 7. Protección de Rutas (`middleware.ts`), Sesión y Manejo de 401
+## 6. Instalación y Ejecución Local
 
-### 7.1. Protección con `middleware.ts` (en la raíz del repositorio)
-El archivo `middleware.ts` intercepta las solicitudes hacia rutas protegidas antes de resolver la página:
-- **Rutas Privadas (`/cases`, `/cases/:path*`, `/admin`, `/admin/:path*`)**: Verifica la presencia de la cookie `cr_token`. Si no existe o si el token está expirado, redirige a `/login` (sin parámetro `?redirect`).
-- **Validación de Expiración del Token**: Decodifica el payload en base64 del JWT (`parseJwt`) y comprueba que `exp * 1000 > Date.now()`. Si el token ya venció, se considera sesión inválida y redirige a `/login`.
-- **Control de Acceso por Rol**: Si un usuario con rol distinto a `ADMIN` intenta acceder a `/admin`, el middleware lo redirige automáticamente a `/cases`.
-- **Rutas de Autenticación (`/login`, `/register`)**: Si el usuario ya cuenta con una sesión válida activa, se le redirige automáticamente a `/cases`.
-
-### 7.2. Cookie de Sesión `cr_token`
-- Al autenticarse, el token JWT devuelto por el backend se guarda en la cookie `cr_token`.
-- Configuración de la cookie:
-  - `path: '/'`
-  - `sameSite: 'lax'`
-  - `secure: true` en producción (HTTPS).
-  - `expires: 1` (expira en **1 día**, sincronizado exactamente con `JWT_EXPIRES_IN=1d` del backend).
-
-### 7.3. Manejo de Errores 401 en `http-client.ts`
-- Cuando el backend retorna un código HTTP 401 (token inválido o revocado), el método `handleUnauthorized()` de `http-client.ts`:
-  1. Elimina la cookie `cr_token` mediante `Cookies.remove('cr_token', { path: '/' })`.
-  2. Redirige al usuario al inicio de sesión mediante `window.location.href = '/login?expired=1'`.
-  3. La página `/login` detecta el parámetro `expired=1` y muestra el mensaje informativo correspondiente.
-
----
-
-## 8. Filtros de Casos, Estados y Modo Oscuro
-
-- **Estados de Caso**: El sistema gestiona tres estados procesales tipados en `CaseStatus`:
-  - `OPEN` (Abierto)
-  - `IN_PROGRESS` (En investigación)
-  - `CLOSED` (Cerrado: restringe la adición de nuevos sospechosos y evidencias, pero permite consulta y edición de existentes).
-- **Filtros Reales en `/cases`**: El componente `CaseFilters` permite filtrar los expedientes en tiempo real por:
-  - `q`: Búsqueda textual por título o ubicación.
-  - `status`: Selector de estado (`OPEN`, `IN_PROGRESS`, `CLOSED`).
-  - `from`: Fecha de inicio del rango.
-  - `to`: Fecha de fin del rango.
-  - Botón interactivo para reiniciar los filtros (`LIMPIAR FILTROS`) cuando hay alguno activo.
-- **Alternancia de Tema (Modo Oscuro / Papel Forense)**: El componente `ThemeToggle` alterna entre el modo oscuro predeterminado y el modo claro (`data-theme="light"` en la etiqueta `<html>`), persistiendo la preferencia en `localStorage`.
-- **Suite de Pruebas del Backend**: Los contratos de datos consumidos por este frontend están respaldados por las **119 pruebas automatizadas** de la suite en Vitest del backend.
-
----
-
-## 9. Variables de Entorno (`.env.local`)
-
-Crear un archivo `.env.local` en la raíz del repositorio frontend:
-
-```env
-# URL base de la API sin el prefijo /api (el cliente HTTP lo añade en cada solicitud)
-NEXT_PUBLIC_API_HOST=http://localhost:4000
-```
-
-Para el entorno de producción en Vercel:
-```env
-NEXT_PUBLIC_API_HOST=https://sistema-investigacion-criminal-backend.onrender.com
-```
-
-> [!IMPORTANT]
-> **Modificación de `NEXT_PUBLIC_API_HOST`:**  
-> Las variables con prefijo `NEXT_PUBLIC_*` son inyectadas en tiempo de compilación por Next.js (`next build`). Cualquier cambio a esta variable en Vercel requiere disparar un redespliegue para que surta efecto en el navegador de los usuarios.
-
----
-
-## 10. Instalación y Ejecución Local
-
-1. Ubicarse en la raíz del repositorio frontend:
-   ```bash
-   cd sistema-investigacion-criminal-frontend
-   ```
-2. Instalar dependencias exactas:
+1. Instalar dependencias exactas:
    ```bash
    npm ci
    ```
-3. Iniciar el servidor de desarrollo:
+2. Ejecutar linter y formateador:
+   ```bash
+   npm run lint
+   npm run format:check
+   ```
+3. Construir la versión de producción:
+   ```bash
+   npm run build
+   ```
+4. Iniciar el servidor de desarrollo:
    ```bash
    npm run dev
    ```
-4. Abrir en el navegador: [http://localhost:3000](http://localhost:3000)
-
----
-
-## 11. Despliegue en Producción y Entrega Continua (CI/CD)
-
-### 11.1. Guía de Despliegue en Orden de Dependencias
-Para desplegar el sistema completo desde cero, debe seguirse estrictamente este orden:
-
-1. **Paso 1: Supabase (Base de Datos & Storage)**:
-   - Crear el proyecto en Supabase y obtener las cadenas de conexión: Transaction Pooler (puerto 6543) y Session Pooler (puerto 5432).
-   - Crear el bucket `case-images` con acceso público de lectura y políticas de subida autenticada.
-   - Obtener la clave `service_role`.
-
-2. **Paso 2: Render (Backend API)**:
-   - Crear el Web Service vinculado al repositorio de GitHub del backend.
-   - Configurar variables de entorno (`DATABASE_URL`, `DIRECT_URL`, `JWT_SECRET`, `SUPABASE_*`, etc.).
-   - Build Command: `npm ci --include=dev && npx prisma generate && npx prisma migrate deploy && npm run build`
-   - Start Command: `node dist/server.js` (o `npm start`)
-   - Health Check Path: `/api/health`
-
-3. **Paso 3: Vercel (Frontend)**:
-   - Importar el repositorio del frontend en Vercel con Framework Preset `Next.js`.
-   - Configurar la variable de entorno:
-     `NEXT_PUBLIC_API_HOST=https://sistema-investigacion-criminal-backend.onrender.com`
-   - Desplegar. Vercel ejecuta `next build` en cada push a la rama `main`.
-
-4. **Paso 4: Actualizar `CORS_ORIGIN` en Render**:
-   - Copiar la URL asignada por Vercel (`https://sistema-investigacion-criminal-fron.vercel.app`).
-   - En el dashboard de Render, actualizar la variable `CORS_ORIGIN` con este dominio exacto (sin barra final) para autorizar las solicitudes del navegador.
-
-### 11.2. Entrega Continua en Vercel
-- Vercel ejecuta automáticamente `next build` en cada push a la rama `main`, optimizando y desplegando la aplicación en el dominio de producción.
+   Abrir en el navegador: [http://localhost:3000](http://localhost:3000).

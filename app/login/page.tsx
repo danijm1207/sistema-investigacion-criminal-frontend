@@ -59,7 +59,6 @@ function LoginFormInner() {
               Acceso a Expedientes
             </h1>
           </div>
-          
         </div>
 
         {expiredNotice && (

@@ -94,7 +94,8 @@ export const CaseDetailView: React.FC<CaseDetailViewProps> = ({ caseData }) => {
             <strong className="text-alerta tracking-wider uppercase">[EXPEDIENTE CERRADO]</strong>
             <p className="mt-0.5 text-papel-dark">
               Esta investigación se encuentra formalmente concluida. Se permite su reapertura o
-              edición, pero no se pueden anexar nuevos sospechosos ni evidencias conforme al protocolo de custodia.
+              edición, pero no se pueden anexar nuevos sospechosos ni evidencias conforme al
+              protocolo de custodia.
             </p>
           </div>
         </div>

@@ -1,7 +1,17 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { User as UserIcon, Settings, Shield, X, Check, Sun, Moon, Key, CheckCircle2 } from 'lucide-react';
+import {
+  User as UserIcon,
+  Settings,
+  Shield,
+  X,
+  Check,
+  Sun,
+  Moon,
+  Key,
+  CheckCircle2,
+} from 'lucide-react';
 import { useAuth } from '../../auth';
 import { Button } from './Button';
 import { Input } from './Input';
@@ -33,7 +43,8 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({ isOp
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const currentTheme = (document.documentElement.getAttribute('data-theme') as 'dark' | 'light') || 'dark';
+      const currentTheme =
+        (document.documentElement.getAttribute('data-theme') as 'dark' | 'light') || 'dark';
       setTheme(currentTheme);
     }
   }, [isOpen]);
@@ -90,7 +101,10 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({ isOp
                 EXPEDIENTE DE PERSONAL // CREDENCIAL FORENSE
               </span>
             </div>
-            <h2 id="profile-modal-title" className="font-serif text-lg tracking-wide text-papel mt-1">
+            <h2
+              id="profile-modal-title"
+              className="font-serif text-lg tracking-wide text-papel mt-1"
+            >
               Perfil y Ajustes del Investigador
             </h2>
           </div>
@@ -151,9 +165,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({ isOp
                         {userRoleDisplay}
                       </span>
                     </div>
-                    <p className="text-xs font-mono text-papel-muted truncate">
-                      {user.email}
-                    </p>
+                    <p className="text-xs font-mono text-papel-muted truncate">{user.email}</p>
                     <div className="flex items-center gap-3 pt-1 text-[10px] font-mono text-papel-muted">
                       <span>ID: {user.id.slice(0, 8).toUpperCase()}</span>
                       <span>&bull;</span>
@@ -252,7 +264,9 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({ isOp
                       <span className="text-xs font-bold text-papel">Modo Noir (Oscuro)</span>
                       <Moon className="w-4 h-4 text-alerta" />
                     </div>
-                    <p className="text-[10px] text-papel-muted">Estética clásica de gabinete de investigación nocturno</p>
+                    <p className="text-[10px] text-papel-muted">
+                      Estética clásica de gabinete de investigación nocturno
+                    </p>
                   </button>
 
                   <button
@@ -268,7 +282,9 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({ isOp
                       <span className="text-xs font-bold text-papel">Modo Expediente (Claro)</span>
                       <Sun className="w-4 h-4 text-alerta" />
                     </div>
-                    <p className="text-[10px] text-papel-muted">Papel dossier y archivo pericial de alta legibilidad</p>
+                    <p className="text-[10px] text-papel-muted">
+                      Papel dossier y archivo pericial de alta legibilidad
+                    </p>
                   </button>
                 </div>
               </div>
@@ -281,8 +297,12 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({ isOp
 
                 <label className="flex items-center justify-between p-3 bg-grafito-dark border border-grafito-light cursor-pointer">
                   <div className="space-y-0.5">
-                    <span className="text-xs font-mono text-papel block">Confirmar acciones críticas</span>
-                    <span className="text-[10px] text-papel-muted block">Solicitar doble confirmación al desactivar casos o evidencias</span>
+                    <span className="text-xs font-mono text-papel block">
+                      Confirmar acciones críticas
+                    </span>
+                    <span className="text-[10px] text-papel-muted block">
+                      Solicitar doble confirmación al desactivar casos o evidencias
+                    </span>
                   </div>
                   <input
                     type="checkbox"
@@ -294,8 +314,12 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({ isOp
 
                 <label className="flex items-center justify-between p-3 bg-grafito-dark border border-grafito-light cursor-pointer">
                   <div className="space-y-0.5">
-                    <span className="text-xs font-mono text-papel block">Registro de auditoría visual</span>
-                    <span className="text-[10px] text-papel-muted block">Mostrar etiquetas de seguridad y códigos correlativos periciales</span>
+                    <span className="text-xs font-mono text-papel block">
+                      Registro de auditoría visual
+                    </span>
+                    <span className="text-[10px] text-papel-muted block">
+                      Mostrar etiquetas de seguridad y códigos correlativos periciales
+                    </span>
                   </div>
                   <input
                     type="checkbox"
@@ -310,7 +334,9 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({ isOp
               <div className="p-4 bg-grafito-dark/80 border border-grafito-light space-y-2 text-xs font-mono">
                 <div className="flex items-center gap-2 text-alerta font-bold">
                   <Key className="w-3.5 h-3.5" />
-                  <span className="text-[11px] uppercase tracking-wider">Criptografía y Sesión Activa</span>
+                  <span className="text-[11px] uppercase tracking-wider">
+                    Criptografía y Sesión Activa
+                  </span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-[10px] text-papel-muted pt-1">
                   <div>
